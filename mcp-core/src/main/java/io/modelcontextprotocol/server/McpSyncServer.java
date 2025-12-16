@@ -84,8 +84,19 @@ public class McpSyncServer {
 	 * @param toolHandler The tool handler to add
 	 */
 	public void addTool(McpServerFeatures.SyncToolSpecification toolHandler) {
+		addTool(toolHandler, true);
+	}
+
+	/**
+	 * Add a new tool handler.
+	 * @param toolHandler The tool handler to add
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 */
+	public void addTool(McpServerFeatures.SyncToolSpecification toolHandler, boolean notifyListChanged) {
 		this.asyncServer
-			.addTool(McpServerFeatures.AsyncToolSpecification.fromSync(toolHandler, this.immediateExecution))
+			.addTool(McpServerFeatures.AsyncToolSpecification.fromSync(toolHandler, this.immediateExecution),
+					notifyListChanged)
 			.block();
 	}
 
@@ -102,7 +113,17 @@ public class McpSyncServer {
 	 * @param toolName The name of the tool handler to remove
 	 */
 	public void removeTool(String toolName) {
-		this.asyncServer.removeTool(toolName).block();
+		removeTool(toolName, true);
+	}
+
+	/**
+	 * Remove a tool handler.
+	 * @param toolName The name of the tool handler to remove
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 */
+	public void removeTool(String toolName, boolean notifyListChanged) {
+		this.asyncServer.removeTool(toolName, notifyListChanged).block();
 	}
 
 	/**
@@ -110,9 +131,20 @@ public class McpSyncServer {
 	 * @param resourceSpecification The resource specification to add
 	 */
 	public void addResource(McpServerFeatures.SyncResourceSpecification resourceSpecification) {
+		addResource(resourceSpecification, true);
+	}
+
+	/**
+	 * Add a new resource handler.
+	 * @param resourceSpecification The resource specification to add
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 */
+	public void addResource(McpServerFeatures.SyncResourceSpecification resourceSpecification,
+			boolean notifyListChanged) {
 		this.asyncServer
 			.addResource(McpServerFeatures.AsyncResourceSpecification.fromSync(resourceSpecification,
-					this.immediateExecution))
+					this.immediateExecution), notifyListChanged)
 			.block();
 	}
 
@@ -129,7 +161,17 @@ public class McpSyncServer {
 	 * @param resourceUri The URI of the resource handler to remove
 	 */
 	public void removeResource(String resourceUri) {
-		this.asyncServer.removeResource(resourceUri).block();
+		removeResource(resourceUri, true);
+	}
+
+	/**
+	 * Remove a resource handler.
+	 * @param resourceUri The URI of the resource handler to remove
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 */
+	public void removeResource(String resourceUri, boolean notifyListChanged) {
+		this.asyncServer.removeResource(resourceUri, notifyListChanged).block();
 	}
 
 	/**
@@ -137,9 +179,20 @@ public class McpSyncServer {
 	 * @param resourceTemplateSpecification The resource template specification to add
 	 */
 	public void addResourceTemplate(McpServerFeatures.SyncResourceTemplateSpecification resourceTemplateSpecification) {
+		addResourceTemplate(resourceTemplateSpecification, true);
+	}
+
+	/**
+	 * Add a new resource template.
+	 * @param resourceTemplateSpecification The resource template specification to add
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 */
+	public void addResourceTemplate(McpServerFeatures.SyncResourceTemplateSpecification resourceTemplateSpecification,
+			boolean notifyListChanged) {
 		this.asyncServer
 			.addResourceTemplate(McpServerFeatures.AsyncResourceTemplateSpecification
-				.fromSync(resourceTemplateSpecification, this.immediateExecution))
+				.fromSync(resourceTemplateSpecification, this.immediateExecution), notifyListChanged)
 			.block();
 	}
 
@@ -156,7 +209,17 @@ public class McpSyncServer {
 	 * @param uriTemplate The URI template of the resource template to remove
 	 */
 	public void removeResourceTemplate(String uriTemplate) {
-		this.asyncServer.removeResourceTemplate(uriTemplate).block();
+		removeResourceTemplate(uriTemplate, true);
+	}
+
+	/**
+	 * Remove a resource template.
+	 * @param uriTemplate The URI template of the resource template to remove
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 */
+	public void removeResourceTemplate(String uriTemplate, boolean notifyListChanged) {
+		this.asyncServer.removeResourceTemplate(uriTemplate, notifyListChanged).block();
 	}
 
 	/**
@@ -164,9 +227,20 @@ public class McpSyncServer {
 	 * @param promptSpecification The prompt specification to add
 	 */
 	public void addPrompt(McpServerFeatures.SyncPromptSpecification promptSpecification) {
+		addPrompt(promptSpecification, true);
+	}
+
+	/**
+	 * Add a new prompt handler.
+	 * @param promptSpecification The prompt specification to add
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 */
+	public void addPrompt(McpServerFeatures.SyncPromptSpecification promptSpecification, boolean notifyListChanged) {
 		this.asyncServer
 			.addPrompt(
-					McpServerFeatures.AsyncPromptSpecification.fromSync(promptSpecification, this.immediateExecution))
+					McpServerFeatures.AsyncPromptSpecification.fromSync(promptSpecification, this.immediateExecution),
+					notifyListChanged)
 			.block();
 	}
 
@@ -183,7 +257,17 @@ public class McpSyncServer {
 	 * @param promptName The name of the prompt handler to remove
 	 */
 	public void removePrompt(String promptName) {
-		this.asyncServer.removePrompt(promptName).block();
+		removePrompt(promptName, true);
+	}
+
+	/**
+	 * Remove a prompt handler.
+	 * @param promptName The name of the prompt handler to remove
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 */
+	public void removePrompt(String promptName, boolean notifyListChanged) {
+		this.asyncServer.removePrompt(promptName, notifyListChanged).block();
 	}
 
 	/**

@@ -320,6 +320,17 @@ public class McpAsyncServer {
 	 * @return Mono that completes when clients have been notified of the change
 	 */
 	public Mono<Void> addTool(McpServerFeatures.AsyncToolSpecification toolSpecification) {
+		return addTool(toolSpecification, true);
+	}
+
+	/**
+	 * Add a new tool call specification at runtime.
+	 * @param toolSpecification The tool specification to add
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 * @return Mono that completes when clients have been notified of the change
+	 */
+	public Mono<Void> addTool(McpServerFeatures.AsyncToolSpecification toolSpecification, boolean notifyListChanged) {
 		if (toolSpecification == null) {
 			return Mono.error(new IllegalArgumentException("Tool specification must not be null"));
 		}
@@ -344,7 +355,7 @@ public class McpAsyncServer {
 			this.tools.add(wrappedToolSpecification);
 			logger.debug("Added tool handler: {}", wrappedToolSpecification.tool().name());
 
-			if (this.serverCapabilities.tools().listChanged()) {
+			if (this.serverCapabilities.tools().listChanged() && notifyListChanged) {
 				return notifyToolsListChanged();
 			}
 			return Mono.empty();
@@ -480,6 +491,17 @@ public class McpAsyncServer {
 	 * @return Mono that completes when clients have been notified of the change
 	 */
 	public Mono<Void> removeTool(String toolName) {
+		return removeTool(toolName, true);
+	}
+
+	/**
+	 * Remove a tool handler at runtime.
+	 * @param toolName The name of the tool handler to remove
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 * @return Mono that completes when clients have been notified of the change
+	 */
+	public Mono<Void> removeTool(String toolName, boolean notifyListChanged) {
 		if (toolName == null) {
 			return Mono.error(new IllegalArgumentException("Tool name must not be null"));
 		}
@@ -491,7 +513,7 @@ public class McpAsyncServer {
 			if (this.tools.removeIf(toolSpecification -> toolSpecification.tool().name().equals(toolName))) {
 
 				logger.debug("Removed tool handler: {}", toolName);
-				if (this.serverCapabilities.tools().listChanged()) {
+				if (this.serverCapabilities.tools().listChanged() && notifyListChanged) {
 					return notifyToolsListChanged();
 				}
 			}
@@ -550,6 +572,18 @@ public class McpAsyncServer {
 	 * @return Mono that completes when clients have been notified of the change
 	 */
 	public Mono<Void> addResource(McpServerFeatures.AsyncResourceSpecification resourceSpecification) {
+		return addResource(resourceSpecification, true);
+	}
+
+	/**
+	 * Add a new resource handler at runtime.
+	 * @param resourceSpecification The resource handler to add
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 * @return Mono that completes when clients have been notified of the change
+	 */
+	public Mono<Void> addResource(McpServerFeatures.AsyncResourceSpecification resourceSpecification,
+			boolean notifyListChanged) {
 		if (resourceSpecification == null || resourceSpecification.resource() == null) {
 			return Mono.error(new IllegalArgumentException("Resource must not be null"));
 		}
@@ -567,7 +601,7 @@ public class McpAsyncServer {
 			else {
 				logger.debug("Added resource handler: {}", resourceSpecification.resource().uri());
 			}
-			if (this.serverCapabilities.resources().listChanged()) {
+			if (this.serverCapabilities.resources().listChanged() && notifyListChanged) {
 				return notifyResourcesListChanged();
 			}
 			return Mono.empty();
@@ -588,6 +622,17 @@ public class McpAsyncServer {
 	 * @return Mono that completes when clients have been notified of the change
 	 */
 	public Mono<Void> removeResource(String resourceUri) {
+		return removeResource(resourceUri, true);
+	}
+
+	/**
+	 * Remove a resource handler at runtime.
+	 * @param resourceUri The URI of the resource handler to remove
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 * @return Mono that completes when clients have been notified of the change
+	 */
+	public Mono<Void> removeResource(String resourceUri, boolean notifyListChanged) {
 		if (resourceUri == null) {
 			return Mono.error(new IllegalArgumentException("Resource URI must not be null"));
 		}
@@ -600,7 +645,7 @@ public class McpAsyncServer {
 			McpServerFeatures.AsyncResourceSpecification removed = this.resources.remove(resourceUri);
 			if (removed != null) {
 				logger.debug("Removed resource handler: {}", resourceUri);
-				if (this.serverCapabilities.resources().listChanged()) {
+				if (this.serverCapabilities.resources().listChanged() && notifyListChanged) {
 					return notifyResourcesListChanged();
 				}
 				return Mono.empty();
@@ -619,6 +664,19 @@ public class McpAsyncServer {
 	 */
 	public Mono<Void> addResourceTemplate(
 			McpServerFeatures.AsyncResourceTemplateSpecification resourceTemplateSpecification) {
+		return addResourceTemplate(resourceTemplateSpecification, true);
+	}
+
+	/**
+	 * Add a new resource template at runtime.
+	 * @param resourceTemplateSpecification The resource template to add
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 * @return Mono that completes when clients have been notified of the change
+	 */
+	public Mono<Void> addResourceTemplate(
+			McpServerFeatures.AsyncResourceTemplateSpecification resourceTemplateSpecification,
+			boolean notifyListChanged) {
 
 		if (this.serverCapabilities.resources() == null) {
 			return Mono.error(new IllegalStateException(
@@ -636,7 +694,7 @@ public class McpAsyncServer {
 				logger.debug("Added resource template handler: {}",
 						resourceTemplateSpecification.resourceTemplate().uriTemplate());
 			}
-			if (this.serverCapabilities.resources().listChanged()) {
+			if (this.serverCapabilities.resources().listChanged() && notifyListChanged) {
 				return notifyResourcesListChanged();
 			}
 			return Mono.empty();
@@ -658,6 +716,17 @@ public class McpAsyncServer {
 	 * @return Mono that completes when clients have been notified of the change
 	 */
 	public Mono<Void> removeResourceTemplate(String uriTemplate) {
+		return removeResourceTemplate(uriTemplate, true);
+	}
+
+	/**
+	 * Remove a resource template at runtime.
+	 * @param uriTemplate The URI template of the resource template to remove
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 * @return Mono that completes when clients have been notified of the change
+	 */
+	public Mono<Void> removeResourceTemplate(String uriTemplate, boolean notifyListChanged) {
 
 		if (this.serverCapabilities.resources() == null) {
 			return Mono.error(new IllegalStateException(
@@ -672,6 +741,11 @@ public class McpAsyncServer {
 			else {
 				logger.warn("Ignore as a Resource Template with URI '{}' not found", uriTemplate);
 			}
+
+			if (this.serverCapabilities.resources().listChanged() && notifyListChanged) {
+				return notifyResourcesListChanged();
+			}
+
 			return Mono.empty();
 		});
 	}
@@ -760,6 +834,18 @@ public class McpAsyncServer {
 	 * @return Mono that completes when clients have been notified of the change
 	 */
 	public Mono<Void> addPrompt(McpServerFeatures.AsyncPromptSpecification promptSpecification) {
+		return addPrompt(promptSpecification, true);
+	}
+
+	/**
+	 * Add a new prompt handler at runtime.
+	 * @param promptSpecification The prompt handler to add
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 * @return Mono that completes when clients have been notified of the change
+	 */
+	public Mono<Void> addPrompt(McpServerFeatures.AsyncPromptSpecification promptSpecification,
+			boolean notifyListChanged) {
 		if (promptSpecification == null) {
 			return Mono.error(new IllegalArgumentException("Prompt specification must not be null"));
 		}
@@ -775,7 +861,7 @@ public class McpAsyncServer {
 			else {
 				logger.debug("Added prompt handler: {}", promptSpecification.prompt().name());
 			}
-			if (this.serverCapabilities.prompts().listChanged()) {
+			if (this.serverCapabilities.prompts().listChanged() && notifyListChanged) {
 				return this.notifyPromptsListChanged();
 			}
 
@@ -797,6 +883,17 @@ public class McpAsyncServer {
 	 * @return Mono that completes when clients have been notified of the change
 	 */
 	public Mono<Void> removePrompt(String promptName) {
+		return removePrompt(promptName, true);
+	}
+
+	/**
+	 * Remove a prompt handler at runtime.
+	 * @param promptName The name of the prompt handler to remove
+	 * @param notifyListChanged Whether to notify clients of the tool list change. Only
+	 * effective if the server capability {@code tools.notifyListChanged} is enabled.
+	 * @return Mono that completes when clients have been notified of the change
+	 */
+	public Mono<Void> removePrompt(String promptName, boolean notifyListChanged) {
 		if (promptName == null) {
 			return Mono.error(new IllegalArgumentException("Prompt name must not be null"));
 		}
@@ -809,7 +906,7 @@ public class McpAsyncServer {
 
 			if (removed != null) {
 				logger.debug("Removed prompt handler: {}", promptName);
-				if (this.serverCapabilities.prompts().listChanged()) {
+				if (this.serverCapabilities.prompts().listChanged() && notifyListChanged) {
 					return this.notifyPromptsListChanged();
 				}
 				return Mono.empty();
